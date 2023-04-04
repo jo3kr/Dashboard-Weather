@@ -20,21 +20,21 @@ function saveSearchHistory(city) {
   }
 }
 async function getCoordinates(city) {
-    const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
-    );
-  
-    if (!response.ok) {
-      throw new Error("City not found");
-    }
-  
-    const data = await response.json();
-    return { lat: data.coord.lat, lon: data.coord.lon };
+  const response = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
+  );
+
+  if (!response.ok) {
+    throw new Error("City not found");
   }
-  
+
+  const data = await response.json();
+  return { lat: data.coord.lat, lon: data.coord.lon };
+}
+
 async function getWeatherForecast(lat, lon) {
   const response = await fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=imperial`
   );
   return await response.json();
 }
@@ -48,7 +48,7 @@ function updateCurrentWeather(weatherData) {
   currentWeather.innerHTML = `
         <h2>${city.name} (${date})</h2>
         <img src="https://openweathermap.org/img/wn/${weather[0].icon}@2x.png" alt="${weather[0].description}">
-        <p>Temperature: ${main.temp} °C</p>
+        <p>Temperature: ${main.temp} °F</p>
         <p>Humidity: ${main.humidity}%</p>
         <p>Wind Speed: ${wind.speed} m/s</p>
     `;
@@ -64,7 +64,7 @@ function updateForecast(forecastData) {
             <div>
                 <h3>${date}</h3>
                 <img src="https://openweathermap.org/img/wn/${weather[0].icon}@2x.png" alt="${weather[0].description}">
-                <p>Temperature: ${main.temp} °C</p>
+                <p>Temperature: ${main.temp} °F</p>
                 <p>Humidity: ${main.humidity}%</p>
                 <p>Wind Speed: ${wind.speed} m/s</p>
             </div>
